@@ -34,7 +34,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p release_artifacts
-          cp -r samsconnect/build/windows/runner/Release/* release_artifacts/
+          cp -r samsconnect/build/windows/x64/runner/Release/* release_artifacts/
           7z a samsconnect-windows-x64.zip ./release_artifacts/*
 
       - name: Upload Windows Artifact
