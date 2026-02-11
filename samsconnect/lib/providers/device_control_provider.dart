@@ -34,4 +34,8 @@ class DeviceControlProvider with ChangeNotifier {
   Future<void> pressPower(String deviceId) async {
     await _adbService.pressPower(deviceId);
   }
+
+  Future<Uint8List?> takeScreenshot(String deviceId) async {
+    return await _adbService.getScreenCapture(deviceId);
+  }
 }

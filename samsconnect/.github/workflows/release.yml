@@ -8,21 +8,38 @@ on:
 jobs:
   build-windows:
     runs-on: windows-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
+      - uses: actions/checkout@v4
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: true
+          
       - name: Install Dependencies
         run: flutter pub get
+        
       - name: Build Windows
-        working-directory: samsconnect
         run: flutter build windows --release
-      - name: Archive Production
-        uses: the-coding-turtle/ga-project-release-helper@v1.1
+        
+      - name: Create Release Artifacts
+        shell: bash
+        run: |
+          mkdir -p output
+          cp -r build/windows/runner/Release/* output/
+          cd output
+          7z a ../samsconnect-windows-x64.zip *
+          
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          project-name: SamsConnect
-          release-tag: ${{ github.ref_name }}
-          artifacts: build/windows/runner/Release/*
-          token: ${{ secrets.GITHUB_TOKEN }}
+          files: samsconnect-windows-x64.zip
+          name: SamsConnect ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -21,6 +21,9 @@ import '../widgets/layout/top_bar.dart';
 import '../widgets/dialogs/about_developer_dialog.dart';
 import '../../services/updates/update_service.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
+import 'dart:io';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -128,6 +131,52 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _takeDeviceScreenshot(String deviceId) async {
+    try {
+      final bytes =
+          await context.read<DeviceControlProvider>().takeScreenshot(deviceId);
+      if (bytes == null) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to take screenshot')),
+          );
+        }
+        return;
+      }
+
+      final directory = await getApplicationDocumentsDirectory();
+      final screenshotsDir =
+          Directory(p.join(directory.path, 'SamsConnect', 'Screenshots'));
+      if (!screenshotsDir.existsSync()) {
+        await screenshotsDir.create(recursive: true);
+      }
+
+      final fileName =
+          'Screenshot_${DateTime.now().millisecondsSinceEpoch}.png';
+      final filePath = p.join(screenshotsDir.path, fileName);
+      final file = File(filePath);
+      await file.writeAsBytes(bytes);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Screenshot saved: $fileName'),
+            action: SnackBarAction(
+              label: 'Open Folder',
+              onPressed: () => launchUrl(Uri.directory(screenshotsDir.path)),
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
+    }
   }
 
   Future<void> _refreshDevices() async {
@@ -516,7 +565,7 @@ class _HomeScreenState extends State<HomeScreen> {
               _buildControlButton(
                 icon: Icons.camera_alt,
                 label: 'Snap',
-                onPressed: () {}, // TODO: Screenshot
+                onPressed: () => _takeDeviceScreenshot(device.id),
               ),
             ],
           ),
