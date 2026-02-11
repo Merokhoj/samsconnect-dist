@@ -1,0 +1,85 @@
+name: samsconnect
+description: A powerful Android device management and mirroring console
+publish_to: 'none'
+version: 1.1.0+2
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # State Management
+  provider: ^6.1.0
+  
+  # Platform Integration
+  window_manager: ^0.3.9
+  screen_retriever: ^0.1.9
+  
+  network_info_plus: ^5.0.3
+  qr_flutter: ^4.1.0
+  
+  # Desktop Integration
+  desktop_drop: ^0.4.4
+  
+  # File Management
+  file_picker: ^8.0.0
+  path_provider: ^2.1.2
+  path: ^1.9.0
+  
+  # Process Management
+  process_run: ^0.14.2
+  
+  # UI
+  flutter_animate: ^4.5.0
+  shimmer: ^3.0.0
+  
+  # Utils
+  logger: ^2.5.0
+  meta: ^1.11.0
+  uuid: ^4.3.3
+  
+  # Icons
+  cupertino_icons: ^1.0.8
+  google_fonts: ^8.0.1
+  glassmorphism: ^3.0.0
+  url_launcher: ^6.3.2
+  http: ^1.6.0
+  package_info_plus: ^9.0.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.8
+  mockito: ^5.4.4
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: false
+  image_path: "assets/images/app_logo.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "assets/images/app_logo.png"
+    background_color: "#ffffff"
+    theme_color: "#ffffff"
+  windows:
+    generate: true
+    icon_size: 48
+  macos:
+    generate: true
+    image_path: "assets/images/app_logo.png"
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/tools/linux/
+    - assets/tools/windows/
+    - assets/tools/macos/

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=SamsConnect
+Comment=Android Device Management & Mirroring Console
+Exec=samsconnect
+Icon=samsconnect
+Terminal=false
+Type=Application
+Categories=Utility;System;
+Keywords=android;adb;mirroring;device;management;
+StartupNotify=true
