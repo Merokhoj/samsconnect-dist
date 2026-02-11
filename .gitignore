@@ -1,0 +1,26 @@
+# User-specific ignores
+.DS_Store
+.idea/
+.vscode/
+
+# Build artifacts
+build/
+bin/
+obj/
+
+# Sensitive data
+*.jks
+*.keystore
+*.key
+*.pem
+
+# Project source code (Hidden from Distribution repo)
+samsconnect/
+lib/
+android/
+ios/
+linux/
+macos/
+windows/
+web/
+test/

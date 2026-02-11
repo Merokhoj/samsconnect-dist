@@ -1,0 +1,21 @@
+{
+  "version": "1.1.0",
+  "buildNumber": "2",
+  "releaseDate": "2026-02-11T14:15:00Z",
+  "releaseNotes": "Initial production release of SamsConnect with premium branding and secure distribution architecture.",
+  "downloadUrl": "https://github.com/merokhoj/samsconnect-dist/releases/latest/download/samsconnect_1.1.0-2_amd64.deb",
+  "platforms": {
+    "linux": {
+      "format": "deb",
+      "size": "13MB"
+    },
+    "windows": {
+      "status": "In Progress",
+      "format": "exe"
+    },
+    "macos": {
+      "status": "In Progress",
+      "format": "dmg"
+    }
+  }
+}
