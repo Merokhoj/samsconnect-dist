@@ -8,10 +8,13 @@ on:
 jobs:
   build-windows:
     runs-on: windows-latest
+    timeout-minutes: 20
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
       
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -27,18 +30,69 @@ jobs:
         working-directory: samsconnect
         run: flutter build windows --release
         
-      - name: Create Release Artifacts
+      - name: Package Windows
         shell: bash
         run: |
-          mkdir -p output
-          cp -r samsconnect/build/windows/runner/Release/* output/
-          cd output
-          7z a ../samsconnect-windows-x64.zip *
+          mkdir -p release_artifacts
+          cp -r samsconnect/build/windows/runner/Release/* release_artifacts/
+          7z a samsconnect-windows-x64.zip ./release_artifacts/*
+
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-artifact
+          path: samsconnect-windows-x64.zip
+
+  build-macos:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
           
+      - name: Install Dependencies
+        working-directory: samsconnect
+        run: flutter pub get
+        
+      - name: Build MacOS
+        working-directory: samsconnect
+        run: flutter build macos --release
+        
+      - name: Package MacOS
+        run: |
+          cd samsconnect/build/macos/Build/Products/Release
+          zip -r ../../../../../samsconnect-macos-x64.zip .
+
+      - name: Upload MacOS Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-artifact
+          path: samsconnect-macos-x64.zip
+
+  create-release:
+    needs: [build-windows, build-macos]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: samsconnect-windows-x64.zip
+          files: |
+            windows-artifact/samsconnect-windows-x64.zip
+            macos-artifact/samsconnect-macos-x64.zip
           name: SamsConnect ${{ github.ref_name }}
           draft: false
           prerelease: false
