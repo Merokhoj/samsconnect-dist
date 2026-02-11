@@ -13,7 +13,7 @@ android/app/src/main/res/drawable-*/
 android/app/src/main/res/mipmap-*/
 
 # Files I want to keep private
-assets/tools/
+# assets/tools/ is now tracked for release builds
 *.pem
 *.jks
 security/
